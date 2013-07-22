@@ -11,8 +11,8 @@
     <p><span>-:-</span> / <span>-:-</span></p>
     <ol>
         <li data-src="mp3/吻别.mp3">吻别</li>
-        <li data-src="mp3/61890609205200128.mp3">简单的事</li>
-        <li class="on" data-src="mp3/a.mp3">不要在别人的怀里想我</li>
+        <li class="on" data-src="mp3/61890609205200128.mp3">简单的事</li>
+        <li data-src="mp3/a.mp3">不要在别人的怀里想我</li>
         <li data-src="mp3/吻别.mp3">吻别</li>
     </ol>
     <script>
@@ -24,6 +24,7 @@
         loop: true,
         onload: function(e, audio) {
             sp1.innerHTML = JSAudio.parseTime(audio.duration);
+            sp.innerHTML = '-:-';
         },
         onplay: function(e, audio) {
             
@@ -37,6 +38,11 @@
         onstop: function() {
             sp.innerHTML = '-:-';
             sp1.innerHTML = '-:-';
+        },
+        onerror: function() {
+            sp.innerHTML = '-:-';
+            sp1.innerHTML = '-:-';
+            alert('加载失败')
         }
     });
     var ol = document.getElementsByTagName('ol')[0];

@@ -74,6 +74,10 @@
             if (that.options.onerror) {
                 that.options.onerror.call(that, e, that.audio);
             }
+            that.canplay = false;
+            if (playingInterval) {
+                clearInterval(playingInterval);
+            }
         });
         audio.addEventListener('ended', function(e) {
             console.log('ended');
@@ -91,6 +95,9 @@
         audio.addEventListener('canplay', function(e) {
             console.log('canplay');
             that.canplay = true;
+            if (that.playing) {
+                that.play();
+            }
             if (that.options.onload) {
                 that.options.onload.call(that, e, that.audio);
             }
@@ -111,9 +118,9 @@
         init.call(this);
     }
 
-    JSAudio.mix = mix;
-
     mix(JSAudio, {
+
+        mix: mix,
 
         parseTime: parseTime
 
@@ -134,22 +141,19 @@
         load: function(src) {
             this.audio.src = src;
             this.canplay = false;
-            if (this.playing) {
-                this.playing = false;
-                this.play();
-            }
         },
 
         stop: function() {
             this.pause();
-            this.audio.src = null;
-            this.audio.src = '';
+            this.audio.removeAttribute('src');
+            this.playing = false;
+            this.canplay = false;
             if (this.options.onstop) {
                 this.options.onstop.call(this);
             }
         },
 
-        src: function() {
+        getSrc: function() {
             var src = this.audio.getAttribute('src');
             if (src) {
                 src = this.audio.src;
