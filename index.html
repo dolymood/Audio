@@ -5,6 +5,77 @@
 <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body>
+    <button class="play">Play</button>
+    <button class="pause">Pause</button>
+    <button class="stop on">Stop</button>
+    <p><span>-:-</span> / <span>-:-</span></p>
+    <ol>
+        <li data-src="mp3/吻别.mp3">吻别</li>
+        <li data-src="mp3/61890609205200128.mp3">简单的事</li>
+        <li class="on" data-src="mp3/a.mp3">不要在别人的怀里想我</li>
+        <li data-src="mp3/吻别.mp3">吻别</li>
+    </ol>
+    <script>
+    var sps = document.getElementsByTagName('span');
+    var sp = sps[0];
+    var sp1 = sps[1];
+    sps = null;
+    var ad = new JSAudio({
+        loop: true,
+        onload: function(e, audio) {
+            sp1.innerHTML = JSAudio.parseTime(audio.duration);
+        },
+        onplay: function(e, audio) {
+            
+        },
+        onplaying: function(time) {
+            sp.innerHTML = time;
+        },
+        onpause: function() {
 
+        },
+        onstop: function() {
+            sp.innerHTML = '-:-';
+            sp1.innerHTML = '-:-';
+        }
+    });
+    var ol = document.getElementsByTagName('ol')[0];
+    var lis = ol.getElementsByTagName('li');
+    function resetLis() {
+        for (var i = 0, len = lis.length; i < len; i++) {
+            lis[i].className = '';
+        }
+    }
+    ol.onclick = function(e) {
+        var target = e.target;
+        if (target.nodeType === 1 && target.nodeName.toUpperCase() === 'LI') {
+            ad.load(target.getAttribute('data-src'));
+            resetLis()
+            target.className += ' on';
+        }
+    }
+    var play = document.getElementsByClassName('play')[0];
+    play.onclick = function() {
+        ad.play();
+        pause.className = 'pause'
+        stop.className = 'stop'
+        this.className += ' on';
+    }
+    var pause = document.getElementsByClassName('pause')[0];
+    pause.onclick = function() {
+        ad.pause();
+        play.className = 'play'
+        stop.className = 'stop'
+        this.className += ' on';
+    }
+    var stop = document.getElementsByClassName('stop')[0];
+    stop.onclick = function() {
+        ad.stop();
+        play.className = 'play'
+        pause.className = 'pause'
+        this.className += ' on';
+    }
+    ad.load(ol.getElementsByClassName('on')[0].getAttribute('data-src'));
+    </script>
 </body>
 </html>
