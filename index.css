@@ -3,7 +3,7 @@ button {
 	outline: none;
 	background-color: #555;
 	color: white;
-	padding: 10px 20px;
+	padding: 5px 10px;
 	cursor: pointer;
 }
 button.on {
@@ -25,4 +25,7 @@ li.on {
 }
 ol li:last-child {
 	border-bottom: none;
+}
+.previous:active, .next:active {
+	background-color: #1B7E3B;
 }
