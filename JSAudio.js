@@ -29,6 +29,7 @@
     }
 
     function parseTime(duration) {
+        duration = duration - 0;
         var mit = Math.floor(duration/60);
         var sec = Math.ceil(duration - mit * 60);
         if (sec >= 60) {
@@ -44,13 +45,11 @@
         var audio = that.audio;
         audio.addEventListener('play', function(e) {
             if (!that.canplay) {
-                e.preventDefault();
                 return false;
             }
         });
         audio.addEventListener('playing', function(e) {
             if (!that.canplay) {
-                e.preventDefault();
                 return false;
             }
             var time = that.getParsedCurrentTime();
