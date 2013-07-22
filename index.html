@@ -2,6 +2,9 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <script type="text/javascript" src="JSAudio.js"></script>
 <link rel="stylesheet" type="text/css" href="index.css">
 </head>
@@ -9,6 +12,7 @@
     <button class="play">Play</button>
     <button class="pause">Pause</button>
     <button class="stop on">Stop</button>
+    <input type="range" min=0 max=100 value=100 />
     <p><span>-:-</span> / <span>-:-</span></p>
     <ol>
         <li data-src="mp3/吻别.mp3">吻别</li>
@@ -16,6 +20,14 @@
         <li data-src="mp3/a.mp3">不要在别人的怀里想我</li>
         <li data-src="mp3/吻别.mp3">吻别</li>
         <li data-src="mp3/aa.mp3">错误</li>
+        <li data-src="mp3/吻别.mp3">吻别</li>
+        <li data-src="mp3/61890609205200128.mp3">简单的事</li>
+        <li data-src="mp3/a.mp3">不要在别人的怀里想我</li>
+        <li data-src="mp3/吻别.mp3">吻别</li>
+        <li data-src="mp3/吻别.mp3">吻别</li>
+        <li data-src="mp3/61890609205200128.mp3">简单的事</li>
+        <li data-src="mp3/a.mp3">不要在别人的怀里想我</li>
+        <li data-src="mp3/吻别.mp3">吻别</li>
     </ol>
     <script>
     var sps = document.getElementsByTagName('span');
@@ -23,27 +35,26 @@
     var sp1 = sps[1];
     sps = null;
     var ad = new JSAudio({
-        loop: true,
+        loop: false,
         onload: function(e, audio) {
             sp1.innerHTML = JSAudio.parseTime(audio.duration);
             sp.innerHTML = '-:-';
         },
-        onplay: function(e, audio) {
-            
-        },
         onplaying: function(time) {
             sp.innerHTML = time;
-        },
-        onpause: function() {
-
         },
         onstop: function() {
             sp.innerHTML = '-:-';
             sp1.innerHTML = '-:-';
         },
-        onerror: function() {
+        onended: function() {
+            this.load(ol.getElementsByClassName('on')[0].nextElementSibling.getAttribute('data-src'));
+            this.play();
+        },
+        onerror: function(e) {
             sp.innerHTML = '-:-';
             sp1.innerHTML = '-:-';
+            console.log(e)
             alert('加载失败')
         }
     });
@@ -84,6 +95,9 @@
         this.className += ' on';
     }
     ad.load(ol.getElementsByClassName('on')[0].getAttribute('data-src'));
+    document.querySelector('input[type="range"]').onchange = function() {
+        ad.setVolume(this.value);
+    }
     </script>
 </body>
 </html>

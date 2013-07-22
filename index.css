@@ -4,6 +4,7 @@ button {
 	background-color: #555;
 	color: white;
 	padding: 10px 20px;
+	cursor: pointer;
 }
 button.on {
 	background-color: green;
@@ -15,10 +16,12 @@ ol {
 }
 li {
 	padding: 5px;
-	border-bottom: 1px solid #555;
+	border-bottom: 1px solid #1B7E3B;
+	cursor: pointer;
 }
 li.on {
 	background-color: #1B7E3B;
+	color: white;
 }
 ol li:last-child {
 	border-bottom: none;
