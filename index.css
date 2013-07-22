@@ -3,7 +3,7 @@ button {
 	outline: none;
 	background-color: #555;
 	color: white;
-	padding: 3px 8px;
+	padding: 10px 20px;
 }
 button.on {
 	background-color: green;
