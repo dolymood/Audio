@@ -121,6 +121,7 @@
     document.getElementsByClassName('next')[0].onclick = function() {
         var crtEle = ol.getElementsByClassName('on')[0];
         var nextEle = crtEle.nextElementSibling;
+        if (!nextEle) return false;
         crtEle.className = '';
         nextEle.className = 'on';
         ad.load(nextEle.getAttribute('data-src'));
