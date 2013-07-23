@@ -5,6 +5,7 @@
         return function() {
             if (!audio) {
                 audio = new Audio();
+                audio.autoplay = false;
             }
             return audio;
         };
