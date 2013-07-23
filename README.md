@@ -56,6 +56,7 @@ ad.getDuration // 得到当前音频的长度： 20 (以秒为单位)
 ad.getParsedDuration // 得到转换后当前音频的长度： 03:45
 ad.setOptions(opts) // 设置options
 ad.setVolume(vol) // 设置声音 vol: 0--100
+ad.destroy // 销毁
 </pre>
 <p>此外，JSAudio还有两个静态方法：</p>
 <pre>

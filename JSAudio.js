@@ -16,7 +16,9 @@
             tmp = args[i];
             if (Object(tmp) === tmp) {
                 for (key in tmp) {
-                    target[key] = tmp[key];
+                    if (tmp.hasOwnProperty(key)) {
+                        target[key] = tmp[key];
+                    }
                 }
             }
         }
@@ -39,84 +41,98 @@
         return parseD(mit) + ':' + parseD(sec);
     }
 
-    var playingInterval;
-    function init() {
-        var that = this;
-        var audio = that.audio;
-        audio.addEventListener('play', function(e) {
-            if (!that.canplay) {
-                return false;
-            }
-        });
-        audio.addEventListener('playing', function(e) {
-            if (!that.canplay) {
-                return false;
-            }
-            var time = that.getParsedCurrentTime();
-            that.playing = true;
-            if (that.options.onplay) {
-                that.options.onplay.call(that, e, that.audio);
-            }
-            if (that.options.onplaying) {
-                if (playingInterval) clearInterval(playingInterval);
-                playingInterval = setInterval(function() {
-                    time = that.getParsedCurrentTime();
-                    that.options.onplaying.call(that, time, that.audio);
-                }, 1000);
+    var playingInterval, that,
+        HANDLERS = {},
+        EVENT_NAMES = ['play', 'playing', 'pause', 'error', 'ended', 
+                       'canplay', 'loadstart', 'progress'];
+    HANDLERS.playHandler = function (e) {
+        if (!that.canplay) {
+            return false;
+        }
+    };
+    HANDLERS.playingHandler = function (e) {
+        if (!that.canplay) {
+            return false;
+        }
+        var time = that.getParsedCurrentTime();
+        that.playing = true;
+        if (that.options.onplay) {
+            that.options.onplay.call(that, e, that.audio);
+        }
+        if (that.options.onplaying) {
+            if (playingInterval) clearInterval(playingInterval);
+            playingInterval = setInterval(function() {
+                time = that.getParsedCurrentTime();
                 that.options.onplaying.call(that, time, that.audio);
-            }
-        });
-        audio.addEventListener('pause', function(e) {
-            that.playing = false;
-            if (playingInterval) {
-                clearInterval(playingInterval);
-            }
-            if (that.options.onpause) {
-                that.options.onpause.call(that, e, that.audio);
-            }
-        });
-        audio.addEventListener('error', function(e) {
-            if (that.options.onerror) {
-                that.options.onerror.call(that, e, that.audio);
-            }
-            that.canplay = false;
-            if (playingInterval) {
-                clearInterval(playingInterval);
-            }
-        });
-        audio.addEventListener('ended', function(e) {
-            that.playing = false;
-            if (playingInterval) {
-                clearInterval(playingInterval);
-            }
-            if (that.options.onended) {
-                that.options.onended.call(that, e, that.audio);
-            }
-            if (that.options.loop) {
-                audio.play();
-            }
-        });
-        audio.addEventListener('canplay', function(e) {
-            that.canplay = true;
-            if (that.playing) {
-                that.play();
-            }
-            if (that.options.onload) {
-                that.options.onload.call(that, e, that.audio);
-            }
-        });
-        audio.addEventListener('loadstart', function(e) {
-            // console.log('loadstart');
-            if (that.options.onloadstart) {
-                that.options.onloadstart.call(that, e, that.audio);
-            }
-        });
-        audio.addEventListener('progress', function(e) {
-            // console.log('progress');
-            if (that.options.onprogress) {
-                that.options.onprogress.call(that, e, that.audio);
-            }
-        });
+            }, 1000);
+            that.options.onplaying.call(that, time, that.audio);
+        }
+    };
+    HANDLERS.pauseHandler = function (e) {
+        that.playing = false;
+        if (playingInterval) {
+            clearInterval(playingInterval);
+        }
+        if (that.options.onpause) {
+            that.options.onpause.call(that, e, that.audio);
+        }
+    };
+    HANDLERS.errorHandler = function (e) {
+        if (that.options.onerror) {
+            that.options.onerror.call(that, e, that.audio);
+        }
+        that.canplay = false;
+        if (playingInterval) {
+            clearInterval(playingInterval);
+        }
+    };
+    HANDLERS.endedHandler = function (e) {
+        that.playing = false;
+        if (playingInterval) {
+            clearInterval(playingInterval);
+        }
+        if (that.options.onended) {
+            that.options.onended.call(that, e, that.audio);
+        }
+        if (that.options.loop) {
+            audio.play();
+        }
+    };
+    HANDLERS.canplayHandler = function (e) {
+        that.canplay = true;
+        if (that.playing) {
+            that.play();
+        }
+        if (that.options.onload) {
+            that.options.onload.call(that, e, that.audio);
+        }
+    };
+    HANDLERS.loadstartHandler = function (e) {
+        if (that.options.onloadstart) {
+            that.options.onloadstart.call(that, e, that.audio);
+        }
+    };
+    HANDLERS.progressHandler = function (e) {
+        if (that.options.onprogress) {
+            that.options.onprogress.call(that, e, that.audio);
+        }
+    };
+
+    function bindEvts(ele) {
+        for (var i = 0, len = EVENT_NAMES.length, name; i < len; i++) {
+            name = EVENT_NAMES[i];
+            ele.addEventListener(name, HANDLERS[name + 'Handler'], false);
+        }
+    }
+    function unbindEvts(ele) {
+        for (var i = 0, len = EVENT_NAMES.length, name; i < len; i++) {
+            name = EVENT_NAMES[i];
+            ele.removeEventListener(name, HANDLERS[name + 'Handler'], false);
+        }
+    }
+    function init() {
+        that = this;
+        bindEvts(that.audio);
     }
 
     function JSAudio(options) {
@@ -147,7 +163,7 @@
                 if (this.options.onerror) {
                     var e = document.createEvent('HTMLEvents');
                     e.type = 'error';
-                    e.initEvent();
+                    e.initEvent('error', false, false);
                     this.options.onerror.call(this, e, this.audio);
                 }
                 return false;
@@ -222,10 +238,36 @@
         },
         
         destroy: function() {
-
+            var _that = this;
+            _that.stop();
+            setTimeout(function() {
+                unbindEvts(_that.audio);
+                _that.options = null;
+                _that.audio = null;
+                that = null;
+            });
         }
 
     };
+
+    (function(prot) {
+        var key, method;
+        for (key in prot) {
+            if (prot.hasOwnProperty(key) && key !== 'constructor') {
+                method = prot[key];
+                prot[key] = function(method) {
+                    return function() {
+                        if (this && this.audio && this.options) {
+                            return method.apply(this, arguments);
+                        } else {
+                            throw new Error('JSAudio实例化对象已经被销毁了！');
+                        }
+                    };
+                }(method);
+            }
+        }
+    })(JSAudio.prototype);
+    
 
     win.JSAudio = JSAudio;
 
