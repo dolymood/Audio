@@ -178,6 +178,7 @@
 
         load: function(src) {
             this.audio.src = src;
+            this.audio.load();
             this.canplay = false;
         },
 
