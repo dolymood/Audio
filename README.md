@@ -77,3 +77,4 @@ JSAudio.parseTime(time) // 将time(秒)装换成 03:50 的形式
 <p>2. <i>在ios5上有bug：只能连续的播放3首，不能一直持续播放</i></p>
 <p>3. <i>在触发canplay事件的时候，不一定能去得到duration，所以在设计上，可以在初始化的时候通过onduration就可以正确的得到duration</i></p>
 <p>4. <i>ios上目前不支持volume设置</i></p>
+<p>5. <i>在ios4.3.3上当切换audio的src的时候canplay会被调用2次，第一次是老的src对应触发的，第二次才是新的src对应触发的</i></p>
