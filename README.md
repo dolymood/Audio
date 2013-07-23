@@ -9,7 +9,7 @@ Audio
 var ad = new JSAudio({
 	loop: false, // 是否循环播放
 	volume: 50, // 声音 0--100
-	onplay: function(e, audio) { // 开始播放
+	onplay: function(e, audio) { // 播放
     	// 	audio: audio元素
     	// this: 实例化的JSAudio对象, 也就是ad
     },
@@ -25,7 +25,7 @@ var ad = new JSAudio({
     onended: function(e, audio) { // 播放结束
     
     },
-    onload:function(e, audio) { // 可以播放
+    onload:function(e, audio) { // 可以开始播放
 
     },
     onloadstart: function(e, audio) { // 开始加载
