@@ -198,7 +198,7 @@
                 if (this.options.onerror) {
                     var e = document.createEvent('HTMLEvents');
                     e.type = 'error';
-                    e.message = '当前audio没有指定src';
+                    e.message = 'audio没有指定src';
                     e.initEvent('error', false, false);
                     this.options.onerror.call(this, e, this.audio);
                 }
