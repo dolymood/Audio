@@ -66,7 +66,11 @@
         onerror: function(e) {
             sp.innerHTML = '--:--';
             sp1.innerHTML = '--:--';
-            alert('加载失败')
+            if (e.message) {
+                alert(e.message)
+            } else {
+                alert('加载失败')
+            }
             var crtEle = ol.getElementsByClassName('on')[0];
             var nextEle = crtEle.nextElementSibling;
             crtEle.className = '';
