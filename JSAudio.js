@@ -1,5 +1,17 @@
 (function(win, doc) {
 
+    var usrAgent = win.navigator.userAgent;
+    var ios = usrAgent.match(/\bOS\s([1-9](?:_[0-9])*)\b/);
+    if (ios) {
+        if (ios.length > 1) {
+            ios = ios[1];
+            ios = win.parseFloat(ios.replace(/_/g, '.'));
+        } else {
+            ios = 1;
+        }
+    } else {
+        ios = 0;
+    }
     var getAudio = function() {
         var audio;
         return function() {
@@ -42,7 +54,7 @@
         return parseD(mit) + ':' + parseD(sec);
     }
 
-    var playingInterval, that,
+    var playingInterval, that, onduration,
         HANDLERS = {},
         EVENT_NAMES = ['play', 'playing', 'pause', 'error', 'ended', 
                        'canplay', 'loadstart', 'progress'];
@@ -55,7 +67,7 @@
         if (!that.canplay) {
             return false;
         }
-        var time = that.getParsedCurrentTime();
+        var time = that[that.options.parseTime ? 'getParsedCurrentTime' : 'getCurrentTime']();
         that.playing = true;
         if (that.options.onplay) {
             that.options.onplay.call(that, e, that.audio);
@@ -63,7 +75,7 @@
         if (that.options.onplaying) {
             if (playingInterval) clearInterval(playingInterval);
             playingInterval = setInterval(function() {
-                time = that.getParsedCurrentTime();
+                time = that[that.options.parseTime ? 'getParsedCurrentTime' : 'getCurrentTime']();
                 that.options.onplaying.call(that, time, that.audio);
             }, 1000);
             that.options.onplaying.call(that, time, that.audio);
@@ -101,17 +113,39 @@
     };
     HANDLERS.canplayHandler = function (e) {
         that.canplay = true;
+        if (that.options.oncanplay) {
+            that.options.oncanplay.call(that, e, that.audio);
+        }
+        if (ios && ios >= 4 && ios < 5 || ios === 0) {
+            if (that.options.onduration) {
+                that.options.onduration.call(that, (that.options.parseTime ? parseTime(that.audio.duration) : that.audio.duration), that.audio);
+            }
+        }
+        if (ios && ios >= 5) {
+            if (durationIntervalId) clearInterval(durationIntervalId);
+            durationIntervalId = setInterval(function() {
+                if (that.audio.duration && that.options.onduration !== _onduration) {
+                    that.options.onduration.call(that, (that.options.parseTime ? parseTime(that.audio.duration) : that.audio.duration), that.audio);
+                    onduration = that.options.onduration;
+                    that.options.onduration = _onduration;
+                    clearInterval(durationIntervalId);
+                }
+            }, 100);
+        }
         if (that.playing) {
             that.play();
         }
-        if (that.options.onload) {
-            that.options.onload.call(that, e, that.audio);
-        }
     };
+    function _onduration() {}
+    var durationIntervalId;
     HANDLERS.loadstartHandler = function (e) {
         if (that.options.onloadstart) {
             that.options.onloadstart.call(that, e, that.audio);
         }
+        if (ios && ios >= 5 && onduration && that.options.onduration === _onduration) {
+            that.options.onduration = onduration;
+        }
+        that.canplay = false;
     };
     HANDLERS.progressHandler = function (e) {
         if (that.options.onprogress) {

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes">
 <script type="text/javascript" src="JSAudio.js"></script>
 <link rel="stylesheet" type="text/css" href="index.css">
 </head>
@@ -35,12 +35,18 @@
     var sps = document.getElementsByTagName('span');
     var sp = sps[0];
     var sp1 = sps[1];
-    sps = null;
     var ad = new JSAudio({
         loop: false,
-        onload: function(e, audio) {
-            sp1.innerHTML = JSAudio.parseTime(audio.duration);
+        parseTime: true,
+        oncanplay: function(e, audio) {
+
+        },
+        onplay: function(e, audio) {
+            // sp1.innerHTML = JSAudio.parseTime(audio.duration);
             sp.innerHTML = '--:--';
+        },
+        onduration: function(duration) {
+            sp1.innerHTML = duration;
         },
         onplaying: function(time) {
             sp.innerHTML = time;
@@ -106,7 +112,7 @@
         this.className += ' on';
     }
     ad.load(ol.getElementsByClassName('on')[0].getAttribute('data-src'));
-    ad.play();
+    // ad.play();
     document.querySelector('input[type="range"]').onchange = function() {
         ad.setVolume(this.value);
     }
