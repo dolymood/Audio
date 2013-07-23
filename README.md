@@ -7,7 +7,7 @@ Audio
 <p>使用说明：</p>
 <pre>
 var ad = new JSAudio({
-	loop: false, // 是否循环播放
+	loop: false, // 是否循环播放当前曲目
 	volume: 50, // 声音 0--100
 	onplay: function(e, audio) { // 播放
     	// 	audio: audio元素
