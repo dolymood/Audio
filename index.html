@@ -15,7 +15,7 @@
     <button class="previous"><<</button>
     <button class="next">>></button>
     <input type="range" min=0 max=100 value=100 />
-    <p><span>-:-</span> / <span>-:-</span></p>
+    <p><span>--:--</span> / <span>--:--</span></p>
     <ol>
         <li data-src="mp3/吻别.mp3">吻别</li>
         <li class="on" data-src="mp3/61890609205200128.mp3">简单的事</li>
@@ -40,14 +40,14 @@
         loop: false,
         onload: function(e, audio) {
             sp1.innerHTML = JSAudio.parseTime(audio.duration);
-            sp.innerHTML = '-:-';
+            sp.innerHTML = '--:--';
         },
         onplaying: function(time) {
             sp.innerHTML = time;
         },
         onstop: function() {
-            sp.innerHTML = '-:-';
-            sp1.innerHTML = '-:-';
+            sp.innerHTML = '--:--';
+            sp1.innerHTML = '--:--';
         },
         onended: function() {
             var crtEle = ol.getElementsByClassName('on')[0];
@@ -58,8 +58,8 @@
             this.play();
         },
         onerror: function(e) {
-            sp.innerHTML = '-:-';
-            sp1.innerHTML = '-:-';
+            sp.innerHTML = '--:--';
+            sp1.innerHTML = '--:--';
             alert('加载失败')
             var crtEle = ol.getElementsByClassName('on')[0];
             var nextEle = crtEle.nextElementSibling;
