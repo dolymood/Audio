@@ -106,6 +106,7 @@
         this.className += ' on';
     }
     ad.load(ol.getElementsByClassName('on')[0].getAttribute('data-src'));
+    ad.play();
     document.querySelector('input[type="range"]').onchange = function() {
         ad.setVolume(this.value);
     }
