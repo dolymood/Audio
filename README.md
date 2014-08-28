@@ -1,11 +1,16 @@
 Audio
 =====
-<p>一个简洁的Audio封装.</p>
-<p>提供常用的功能封装.</p>
-<p>考虑到一般应用场景：</p>
-<i>同时只有一个音频在播放，所以设计上只有一个audio元素，每次更改的时候都是更换audio的src.</i>
-<h3>使用说明：</h3>
-<pre>
+### 一个简洁的Audio封装
+
+提供常用的功能封装
+
+考虑到一般应用场景：
+
+_同时只有一个音频在播放，所以设计上只有一个audio元素，每次更改的时候都是更换audio的src_
+
+#### 使用说明：
+
+```js
 var ad = new JSAudio({
 	loop: false, // 是否循环播放当前曲目
 	volume: 50, // 声音 0--100
@@ -42,14 +47,18 @@ var ad = new JSAudio({
 
     }
 });
-</pre>
-<h3>属性：</h3>
-<pre>
+```
+
+#### 属性：
+
+```js
 ad.playing // 是否正在播放
 ad.canplay // 是否能播放
-</pre>
-<h3>方法：</h3>
-<pre>
+```
+
+#### 方法：
+
+```js
 ad.play() // 播放
 ad.pause() // 暂停
 ad.load(src) // 加载指定src的音频文件
@@ -64,19 +73,26 @@ ad.getParsedDuration // 得到转换后当前音频的长度： 03:45
 ad.setOptions(opts) // 设置options
 ad.setVolume(vol) // 设置声音 vol: 0--100
 ad.destroy // 销毁
-</pre>
-<h3>此外，JSAudio还有两个静态方法：</h3>
-<pre>
+```
+
+#### 此外，JSAudio还有两个静态方法：
+
+```js
 JSAudio.mix(target) // 将第一个参数之后的对象上的属性“克隆”到target对象上
                     // eg: JSAudio.mix({}, {}, {})
 JSAudio.parseTime(time) // 将time(秒)装换成 03:50 的形式
-</pre>
-<h3>bug：</h3>
-<p>1. <i>由于在 mobile safari 上不能自动播放，所以实现不了自动播放，也就是autoplay的效果。因此，需要手工的在某些事件处理函数中来调用audio的play才可以播放。故不提供autoplay功能。</i>
-</p>
-<p>2. <i>在ios5上有bug：只能连续的播放3首(2首)，不能一直持续播放</i></p>
-<p>3. <i>在触发canplay事件的时候，不一定能去得到duration，所以在设计上，可以在初始化的时候通过onduration就可以正确的得到duration</i></p>
-<p>4. <i>ios上目前不支持volume设置</i></p>
-<p>5. <i>在ios4.3.3(其他4.xx不清楚)上当切换audio的src的时候canplay会被调用2次，第一次是老的src对应触发的，第二次才是新的src对应触发的</i></p>
+```
+
+#### bug：
+
+1. _由于在 mobile safari 上不能自动播放，所以实现不了自动播放，也就是autoplay的效果。因此，需要手工的在某些事件处理函数中来调用audio的play才可以播放。故不提供autoplay功能。_
+
+1. _在ios5上有bug：只能连续的播放3首(2首)，不能一直持续播放_
+
+1. _在触发canplay事件的时候，不一定能去得到duration，所以在设计上，可以在初始化的时候通过onduration就可以正确的得到duration_
+
+1. _ios上目前不支持volume设置_
+
+1. _在ios4.3.3(其他4.xx不清楚)上当切换audio的src的时候canplay会被调用2次，第一次是老的src对应触发的，第二次才是新的src对应触发的_
 
 
