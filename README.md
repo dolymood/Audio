@@ -62,17 +62,17 @@ ad.canplay // 是否能播放
 ad.play() // 播放
 ad.pause() // 暂停
 ad.load(src) // 加载指定src的音频文件
-ad.stop // 停止播放
-ad.getSrc // 得到当前正在播放的音频的地址
-ad.getPlayedTime // 得到已播放的时间： 20 (以秒为单位)
-ad.getParsedPlayedTime // 得到转换后已播放的时间： 03:45
-ad.getCurrentTime // 得到正在播放的时间： 20 (以秒为单位)
-ad.getParsedCurrentTime // 得到转换后正在播放的时间： 03:45
-ad.getDuration // 得到当前音频的长度： 20 (以秒为单位)
-ad.getParsedDuration // 得到转换后当前音频的长度： 03:45
+ad.stop() // 停止播放
+ad.getSrc() // 得到当前正在播放的音频的地址
+ad.getPlayedTime() // 得到已播放的时间： 20 (以秒为单位)
+ad.getParsedPlayedTime() // 得到转换后已播放的时间： 03:45
+ad.getCurrentTime() // 得到正在播放的时间： 20 (以秒为单位)
+ad.getParsedCurrentTime() // 得到转换后正在播放的时间： 03:45
+ad.getDuration() // 得到当前音频的长度： 20 (以秒为单位)
+ad.getParsedDuration() // 得到转换后当前音频的长度： 03:45
 ad.setOptions(opts) // 设置options
 ad.setVolume(vol) // 设置声音 vol: 0--100
-ad.destroy // 销毁
+ad.destroy() // 销毁
 ```
 
 #### 此外，JSAudio还有两个静态方法：
